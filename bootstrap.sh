@@ -154,15 +154,15 @@ fi
 if [[ "$use_homebrew" = "Y" ]]; then
   if ! command -v brew 2>&1 >/dev/null; then
     echo "Installing Homebrew"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    #/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     echo ""
 
     #echo >> $HOME/.bashrc
     #echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.bashrc
     #eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
-    test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >>~/.bashrc
+    #test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+    #test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    #echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >>~/.bashrc
   else
     echo "Homebrew already installed. Continuing.."
   fi
