@@ -71,6 +71,7 @@ pkg_install() {
 create_ssh_keys() {
   distro=$(cat /etc/os-release | tr [:upper:] [:lower:] | grep -Poi '(debian|ubuntu|red hat|centos|arch|alpine|fedora)' | uniq)
   system_name=$(uname | tr '[:upper:]' '[:lower:]')
+  new_key_created=false
 
   if [[ ! -d "${HOME}/.ssh" ]]; then
     echo "Create .ssh directory"
@@ -81,23 +82,28 @@ create_ssh_keys() {
     ssh-keygen -t ed25519 -C "Github key for ${distro} ${hostname}" -f ~/.ssh/github_com -q -N ""
     echo " "
     cat ~/.ssh/github_com.pub
-    echo " "
+    echo ""
+    new_key_created=true
   fi
   if [[ ! -f "${HOME}/.ssh/gitlab_com" ]]; then
     echo "Create gitlab key. Remember to add it to gitlab.com"
     ssh-keygen -t ed25519 -C "Gitlab key for ${distro} ${hostname}" -f ~/.ssh/gitlab_com -q -N ""
     echo " "
     cat ~/.ssh/gitlab_com.pub
-    echo " "
+    echo ""
+    new_key_created=true
   fi
 
-  if [[ "$system_name" == "darwin" ]]; then
-    open https://github.com/settings/keys
-  else
-    xdg-open https://github.com/settings/keys
+  if $new_key_created; then
+    if [[ "$system_name" == "darwin" ]]; then
+      open https://github.com/settings/keys
+    else
+      xdg-open https://github.com/settings/keys >/dev/null 2>&1
+    fi
+
+    read -n 1 -s -r -p "Press any key to continue once the key has been added to Github..."
+    echo " "
   fi
-  
-  read -n 1 -s -r -p "Press any key to continue once the key has been added to Github..."
 }
 
 ###########################
@@ -113,16 +119,25 @@ if [[ $variable ]]; then
 fi
 echo "Checking if system is a server"
 echo "  is_server=${is_server}"
-echo ""
+echo " "
 
 system_name=$(uname | tr '[:upper:]' '[:lower:]')
 
 # Create ssh keys for github and gitlab
 create_ssh_keys
 
-echo "Cloning dotfiles repo"
-ssh-agent bash -c 'ssh-add ${HOME}/.ssh/github_com; git clone git@github.com:vchegwidden/os-setup.git ~/dotfiles'
-#git clone git@github.com:vchegwidden/dotfiles.git ~/dotfiles
+if [[ ! -d "${HOME}/dotfiles" ]]; then
+  echo "Cloning dotfiles repo"
+  ssh-agent bash -c 'ssh-add ${HOME}/.ssh/github_com; git clone git@github.com:vchegwidden/dotfiles.git ~/dotfiles'
+  #git clone git@github.com:vchegwidden/dotfiles.git ~/dotfiles
+  echo " "
+fi
+
+if [[ ! -d "${HOME}/Dev" ]]; then
+  echo "Create Dev Directory"
+  mkdir ~/Dev
+  echo " "
+fi
 
 # Install Xcode
 # if [[ "$system_name" == "darwin" ]]; then
@@ -154,7 +169,7 @@ fi
 if [[ "$use_homebrew" = "Y" ]]; then
   if ! command -v brew 2>&1 >/dev/null; then
     echo "Installing Homebrew"
-    #/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     echo ""
 
     #echo >> $HOME/.bashrc
@@ -228,12 +243,11 @@ if [[ "$system_name" == "darwin" ]]; then
 fi
 
 if [[ "$system_name" == "linux" ]]; then
-  echo "I am linux"
-  echo "$OSTYPE"
+  echo "OSTYPE is $OSTYPE"
   #Fedora = linux-gnu
 
   source /etc/os-release
-  echo $PRETTY_NAME
+  echo "PRETTY_NAME is $PRETTY_NAME"
   # Name = Fedora Linux 41 (KDE Plasma)
 
   # TODO check if distro is fedora
@@ -243,8 +257,8 @@ fi
 echo "Setting symlinks"
 #ln -sf $HOME/dotfiles/zsh/.zshrc "$HOME/.zshrc"
 #ln -sf $HOME/dotfiles/zsh/.zprofile "$HOME/.zprofile"
-#ln -sf $HOME/dotfiles/ssh/config "$HOME/.ssh/config"
-#ln -sf $HOME/dotfiles/git/config "$HOME/.gitconfig"
+ln -sf $HOME/dotfiles/ssh/config "$HOME/.ssh/config"
+ln -sf $HOME/dotfiles/git/config "$HOME/.gitconfig"
 #ls -sf $HOME/dotfiles/ideavim/config "$HOME/.ideavimrc"
 #ln -sf $HOME/dotfiles/karabiner/karabiner.json $HOME/.config/karabiner/karabiner.json
 #ln -sf $HOME/dotfiles/ghostty/config $HOME/.config/ghostty/config
