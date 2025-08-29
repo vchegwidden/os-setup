@@ -71,18 +71,18 @@ pkg_install() {
 create_ssh_keys() {
   distro=$(cat /etc/os-release | tr [:upper:] [:lower:] | grep -Poi '(debian|ubuntu|red hat|centos|arch|alpine|fedora)' | uniq)
 
-  if [[ ! -d "~/.ssh" ]; then
+  if [[ ! -d "${HOME}/.ssh" ]]; then
     echo "Create .ssh directory"
     mkdir ~/.ssh
   fi
-  if [[ ! -f "~/.ssh/github_com" ]]; then
+  if [[ ! -f "${HOME}/.ssh/github_com" ]]; then
     echo "Create github key. Remember to add it to github.com"
     ssh-keygen -t ed25519 -C "Github key for ${distro} ${hostname}" -f ~/.ssh/github_com -q -N ""
     echo " "
     cat ~/.ssh/github_com.pub
     echo " "
   fi
-  if [[ ! -f "~/.ssh/gitlab_com" ]]; then
+  if [[ ! -f "${HOME}/.ssh/gitlab_com" ]]; then
     echo "Create gitlab key. Remember to add it to gitlab.com"
     ssh-keygen -t ed25519 -C "Gitlab key for ${distro} ${hostname}" -f ~/.ssh/gitlab_com -q -N ""
     echo " "
