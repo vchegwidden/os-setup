@@ -212,7 +212,7 @@ if [[ "$system_name" == "darwin" ]]; then
   brew_install_cask font-jetbrains-mono-nerd-font
   brew_install_cask podman-desktop
   brew_install_cask slack
-  #    brew_install_cask virtualbox
+  #brew_install_cask virtualbox
   brew_install_cask inkscape
   brew_install_cask gimp
   brew_install_cask brave-browser
@@ -243,14 +243,16 @@ if [[ "$system_name" == "darwin" ]]; then
 fi
 
 if [[ "$system_name" == "linux" ]]; then
-  echo "OSTYPE is $OSTYPE"
-  #Fedora = linux-gnu
+  # echo "OSTYPE is $OSTYPE"
+  # usually linux-gnu
 
   source /etc/os-release
   echo "PRETTY_NAME is $PRETTY_NAME"
   # Name = Fedora Linux 41 (KDE Plasma)
+  # Name = Arch Linux
 
   # TODO check if distro is fedora
+  #pkg_install vscode
 
 fi
 
