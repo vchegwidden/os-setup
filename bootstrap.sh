@@ -90,8 +90,7 @@ create_ssh_keys() {
     echo " "
   fi
 
-  echo "Press any key to continue one the github key has been added"
-  read
+  read -n 1 -s -r -p "Press any key to continue once the key has been added to Github..."
 }
 
 ###########################
