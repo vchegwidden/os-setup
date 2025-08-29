@@ -114,7 +114,8 @@ system_name=$(uname | tr '[:upper:]' '[:lower:]')
 create_ssh_keys
 
 echo "Cloning dotfiles repo"
-git clone git@github.com:vchegwidden/dotfiles.git ~/dotfiles
+ssh-agent bash -c 'ssh-add ${HOME}/.ssh/github_com; git clone git@github.com:vchegwidden/os-setup.git ~/dotfiles'
+#git clone git@github.com:vchegwidden/dotfiles.git ~/dotfiles
 
 # Install Xcode
 # if [[ "$system_name" == "darwin" ]]; then
