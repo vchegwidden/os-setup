@@ -70,6 +70,7 @@ pkg_install() {
 
 create_ssh_keys() {
   distro=$(cat /etc/os-release | tr [:upper:] [:lower:] | grep -Poi '(debian|ubuntu|red hat|centos|arch|alpine|fedora)' | uniq)
+  system_name=$(uname | tr '[:upper:]' '[:lower:]')
 
   if [[ ! -d "${HOME}/.ssh" ]]; then
     echo "Create .ssh directory"
@@ -90,6 +91,12 @@ create_ssh_keys() {
     echo " "
   fi
 
+  if [[ "$system_name" == "darwin" ]]; then
+    open https://github.com/settings/keys
+  else
+    xdg-open https://github.com/settings/keys
+  fi
+  
   read -n 1 -s -r -p "Press any key to continue once the key has been added to Github..."
 }
 
