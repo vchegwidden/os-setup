@@ -157,10 +157,10 @@ if [[ ! -d "${HOME}/Dev" ]]; then
 fi
 
 # Install homebrew
-# install_homebrew
+install_homebrew
 
 # Install common brews used by all systems
-# source ${HOME}/dotfiles/setup/homebrew.sh
+source ${HOME}/dotfiles/setup/homebrew.sh
 
 # MacOS apps
 if [[ "$system_name" == "darwin" ]]; then
