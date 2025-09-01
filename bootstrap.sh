@@ -21,9 +21,14 @@ flatpak_install() {
 }
 
 brew_install() {
+    if command -v $1 2>&1 >/dev/null; then
+        echo "  Command $1 found"
+        return
+    fi
+
     echo "  Installing $1"
     if brew list $1 &>/dev/null; then
-        echo "    ${1} is already installed"
+        echo "    ${1} is already installed via homebrew"
     else
         brew install $1 &&
         echo "    $1 is installed"
@@ -115,8 +120,7 @@ install_homebrew() {
         echo ""
 
         #echo >> $HOME/.bashrc
-        #echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.bashrc
-        #eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        test -d /opt/homebrew && eval "$(/opt/homebrew/bin/brew shellenv)"
         test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
         test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
